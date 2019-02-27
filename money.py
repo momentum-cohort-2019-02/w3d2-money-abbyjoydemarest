@@ -101,8 +101,8 @@ class Money:
         Multiply a money object by a number to get a new money object.
         """
         self.multiplier = multiplier
-        amount = (float(self.amount) * int(multiplier))
-        return Money(str(f"{amount:.{amount.currency.digits}f}"), self.currency.code)
+        amount = self.amount * multiplier
+        return Money(amount, self.currency)
 
     def div(self, divisor):
         """
@@ -110,5 +110,5 @@ class Money:
         """
         self.divisor = divisor
         amount = self.amount / divisor
-        return Money(amount, self.currency.code)
+        return Money(amount, self.currency)
 
