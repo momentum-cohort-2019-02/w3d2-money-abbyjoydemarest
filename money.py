@@ -52,7 +52,6 @@ class Money:
         """
         self.amount = amount
         self.currency = currency
-        
 
     def __str__(self):
         """
@@ -61,12 +60,9 @@ class Money:
         """
         
         if self.currency.symbol != None:
-            return f"{self.currency.symbol}{self.amount:.{self.currency.digits}f}"
-        else: 
-            return f"{self.currency.code}"
-
-        
-
+            return str(f"{self.currency.symbol}{self.amount:.{self.currency.digits}f}")
+        if self.currency.symbol == None:
+            return str(f"{self.currency.code} {self.amount:.{self.currency.digits}f}")
 
     def __repr__(self):
         return f"<Money {str(self)}>"
@@ -84,12 +80,10 @@ class Money:
         currencies, raise a DifferentCurrencyError.
         """ 
         if self.currency == other.currency:
-            amount = self.amount + other.amount 
-            return amount
+            amount = self.amount + other.amount
+            return Money(amount, self.currency)
         else:
             raise DifferentCurrencyError
-
-
 
     def sub(self, other):
         """
@@ -97,8 +91,8 @@ class Money:
         currencies, raise a DifferentCurrencyError.
         """
         if self.currency == other.currency:
-            amount = other.amount - self.amount 
-            return amount
+            amount = self.amount - other.amount 
+            return Money(amount, self.currency)
         else:
             raise DifferentCurrencyError
 
@@ -106,14 +100,15 @@ class Money:
         """
         Multiply a money object by a number to get a new money object.
         """
-        self.multiplier = int(multiplier)
-        amount = int(self.amount) * int(multiplier)
-        return amount
-
+        self.multiplier = multiplier
+        amount = (float(self.amount) * int(multiplier))
+        return Money(str(f"{amount:.{amount.currency.digits}f}"), self.currency.code)
 
     def div(self, divisor):
         """
         Divide a money object by a number to get a new money object.
         """
-        self.divisor = int(divisor)
-        pass
+        self.divisor = divisor
+        amount = self.amount / divisor
+        return Money(amount, self.currency.code)
+
